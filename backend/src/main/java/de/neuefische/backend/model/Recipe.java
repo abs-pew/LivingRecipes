@@ -20,10 +20,6 @@ public record Recipe(
     {
         this(null, title, cookingTime, ingredients, recipeText, image, null, "Regular");
     }
-
-public Recipe createNewRecipe(String id, LocalDateTime createdAt, String category){
-        return( new Recipe(id, title, cookingTime, ingredients, recipeText, image, createdAt, category) );
-}
 }
 
 

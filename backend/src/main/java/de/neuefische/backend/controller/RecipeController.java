@@ -1,5 +1,6 @@
 package de.neuefische.backend.controller;
 
+import de.neuefische.backend.dto.RecipeDto;
 import de.neuefische.backend.model.Recipe;
 import de.neuefische.backend.service.RecipeService;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +21,7 @@ public class RecipeController {
     }
 
     @PostMapping
-    public Recipe addRecipe(@RequestBody Recipe recipe) {
-        return recipeService.addRecipe(recipe);
+    public Recipe addRecipe(@RequestBody RecipeDto recipeDto) {
+        return recipeService.addRecipe(recipeDto);
     }
 }
