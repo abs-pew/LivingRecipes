@@ -1,5 +1,5 @@
 
-import type {Recipe} from "./Recipe.ts";
+import type {Recipe} from "../Recipe.ts";
 
 type Props = {
     recipe: Recipe
