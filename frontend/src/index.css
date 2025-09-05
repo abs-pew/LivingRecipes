@@ -43,5 +43,6 @@ p {
 }
 
 .window-pane.right {
+  text-align: left;
   background-color: #f1f1f1;
 }

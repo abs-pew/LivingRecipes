@@ -16,11 +16,12 @@ export default function RecipeForm(props:Readonly<Props>) {
     return (
        <>
            <form onSubmit={handleSubmit}>
-               <label>
+               <label >
                    <p><strong> Title: </strong>
-                   <input
-                       onChange={event => props.setTitle(event.target.value)}
-                   placeholder={"Enter recipe title ..."}/>
+                       <input
+                           onChange={event => props.setTitle(event.target.value)}
+                           placeholder={"Enter recipe title ..."}
+                           required={true}/>
                    </p>
                </label>
 
@@ -29,7 +30,8 @@ export default function RecipeForm(props:Readonly<Props>) {
                        <input
                            onChange={event => props.setCookingTime(event.target.value)}
                            placeholder={"Enter recipe title ..."}
-                           type={"number"}/>
+                           type={"number"}
+                           required={true}/>
                    </p>
                </label>
 
