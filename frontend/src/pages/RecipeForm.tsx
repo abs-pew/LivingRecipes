@@ -1,16 +1,36 @@
-import type {FormEvent} from "react";
+import {type FormEvent, useState} from "react";
+import * as React from "react";
+import IngredientsSubform from "./IngredientsSubform.tsx";
 
 type Props = {
     setTitle:(title:string) => void
     setCookingTime:(cookingTime:number) => void
+    setImageUrl: (imageUrl:string) => void
     sendDataToDatabase:() => void
 }
 
 export default function RecipeForm(props:Readonly<Props>) {
 
+
+    const [imagePreview, setImagePreview] = useState(null)
+
     function handleSubmit(event:FormEvent<HTMLFormElement>) {
         event.preventDefault()
         props.sendDataToDatabase()
+    }
+
+    function handleImageFile(event: React.ChangeEvent<HTMLInputElement>) {
+        const imageFile = event.target.files[0]
+        if (imageFile)
+        {
+            props.setImageUrl(imageFile.name)
+            setImagePreview(URL.createObjectURL(imageFile))
+        } else
+        {
+            /* this will remove the preview if it is cancelled */
+            props.setImageUrl("")
+            setImagePreview(null)
+        }
     }
 
     return (
@@ -34,6 +54,21 @@ export default function RecipeForm(props:Readonly<Props>) {
                            required={true}/>
                    </p>
                </label>
+
+               <IngredientsSubform/>
+
+               <label>
+                   <p><strong> Image : </strong>
+                       <input
+                           onChange={handleImageFile}
+                           accept={"image/*"}
+                           type={"file"}
+                           />
+                   </p>
+               </label>
+               {imagePreview && (
+                   <p><img src={imagePreview} alt="Selected" width={"200px"} height={"200px"}/></p>
+               )}
 
                <button type={"submit"}> Save Recipe </button>
 

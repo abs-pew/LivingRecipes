@@ -7,7 +7,7 @@ export default function App() {
       <>
           <div className="grid">
               <div className={"window-pane top"}>
-                  Recipes & Recipes
+                  <h1> Recipes & Recipes </h1>
               </div>
               <div className={"window-pane left"}>
                   <NavigationLinks/>
