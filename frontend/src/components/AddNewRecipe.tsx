@@ -3,12 +3,14 @@ import {useState} from "react";
 import axios from "axios";
 import type {RecipeDto} from "../RecipeDto.ts";
 import {useNavigate} from "react-router-dom";
+import type {Ingredient} from "../Ingredient.ts";
 
 export default function AddNewRecipe() {
 
     const [title, setTitle] = useState<string>("")
     const [cookingTime, setCookingTime] = useState<number>(0)
     const [imageUrl, setImageUrl] = useState<string>("")
+    const [ingredients, setIngredients] = useState<Ingredient[]>([{name: "", quantity:0, unit:"GRAM"}])
 
     const routeTo = useNavigate()
 
@@ -16,11 +18,7 @@ export default function AddNewRecipe() {
         const recipeDto: RecipeDto = {
             title: title,
             cookingTime: cookingTime,
-            ingredients: [
-                { name: "Chicken", quantity: 1000, unit: "GRAM" },
-                { name: "butter", quantity: 100, unit: "GRAM" },
-                { name: "salt", quantity: 10, unit: "GRAM" }
-            ],
+            ingredients: ingredients,
             recipeText: "put all ingredients together in a pot and bake them well",
             image: "/images/" + imageUrl
         }
@@ -38,10 +36,10 @@ export default function AddNewRecipe() {
                 setTitle={setTitle}
                 setCookingTime={setCookingTime}
                 setImageUrl={setImageUrl}
+                ingredients={ingredients}
+                setIngredients={setIngredients}
                 sendDataToDatabase={sendDataToDatabase}
             />
-
-
         </>
     )
 }

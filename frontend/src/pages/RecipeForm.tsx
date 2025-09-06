@@ -1,11 +1,14 @@
 import {type FormEvent, useState} from "react";
 import * as React from "react";
 import IngredientsSubform from "./IngredientsSubform.tsx";
+import type {Ingredient} from "../Ingredient.ts";
 
 type Props = {
     setTitle:(title:string) => void
     setCookingTime:(cookingTime:number) => void
     setImageUrl: (imageUrl:string) => void
+    ingredients: Ingredient[]
+    setIngredients: (ingredients:Ingredient[]) => void
     sendDataToDatabase:() => void
 }
 
@@ -49,13 +52,13 @@ export default function RecipeForm(props:Readonly<Props>) {
                    <p><strong> Cooking Time: </strong>
                        <input
                            onChange={event => props.setCookingTime(event.target.value)}
-                           placeholder={"Enter recipe title ..."}
+                           placeholder={"Est. cooking/backing time ..."}
                            type={"number"}
                            required={true}/>
                    </p>
                </label>
 
-               <IngredientsSubform/>
+               <IngredientsSubform ingredients={props.ingredients} setIngredients={props.setIngredients}/>
 
                <label>
                    <p><strong> Image : </strong>

@@ -1,9 +1,13 @@
-import {useState} from "react";
+
 import type {Ingredient} from "../Ingredient.ts";
 
-export default function IngredientsSubform() {
+type Props = {
+    ingredients: Ingredient[]
+    setIngredients: (ingredients:Ingredient[]) => void
 
-    const [ingredients, setIngredients] = useState([{name: "", quantity:0, unit:"GRAM"}])
+}
+export default function IngredientsSubform(props:Readonly<Props>) {
+
 
     const addIngredient = () => {
         /*
@@ -12,10 +16,10 @@ export default function IngredientsSubform() {
         Spread (copy) them into a new array.
         Then add the new object { name: "", quantity: "", unit: "" } at the end.
         */
-        setIngredients([...ingredients, {name: "", quantity:0, unit:"GRAM"}])
+        props.setIngredients([...props.ingredients, {name: "", quantity:0, unit:"GRAM"}])
     }
 
-    const removeIngredient = (index) => {
+    const removeIngredient = (index:number) => {
         /*
         We need to remove ingredient record with provided index parameter.
         Line of code following means:
@@ -24,15 +28,15 @@ export default function IngredientsSubform() {
             idx → The second parameter is the current item’s index in the array.
             idx !== index → Keep the ingredient only if its index is not equal to the one we want to remove.
          */
-        setIngredients(ingredients.filter((_, idx) => index !== idx))
+        props.setIngredients(props.ingredients.filter((_, idx) => index !== idx))
     }
 
     {/* Updates a specific field in a specific ingredient based in passed index and field */}
     const updateIngredients =
-        (index, fieldName, value) => {
-        const updatedIngredients = [...ingredients]
+        (index:number, fieldName:string, value) => {
+        const updatedIngredients = [...props.ingredients]
             updatedIngredients [index][fieldName] = value
-            setIngredients(updatedIngredients)
+            props.setIngredients(updatedIngredients)
     }
 
     return (
@@ -44,12 +48,12 @@ export default function IngredientsSubform() {
                     <th> Name</th>
                     <th> Quantity</th>
                     <th> Unit</th>
-                    <th> Action</th>
+                    <th hidden={(props.ingredients.length === 1)}> Action</th>
                 </tr>
                 </thead>
 
                 <tbody>
-                {ingredients.map((ingredient, index) =>
+                {props.ingredients.map((ingredient, index) =>
                     (
                         <tr key={index}>
                             <td>
@@ -63,7 +67,7 @@ export default function IngredientsSubform() {
                             <td>
                                 <input
                                     placeholder={"Ingredient quantity ..."}
-                                    type={"text"}
+                                    type={"number"}
                                     value={ingredient.quantity}
                                     onChange={(event) =>
                                         updateIngredients(index, "quantity", event.target.value)}/>
@@ -78,10 +82,11 @@ export default function IngredientsSubform() {
                             </td>
                             <td>
                                 <button
+                                    hidden={(props.ingredients.length === 1)}
                                     type="button"
                                     onClick={() => removeIngredient(index)}
                                 >
-                                    Remove
+                                   Remove
                                 </button>
                             </td>
                         </tr>
@@ -93,7 +98,7 @@ export default function IngredientsSubform() {
                 type="button"
                 onClick={addIngredient}
             >
-                + Add Ingredient
+                Add Ingredient
             </button>
         </>
     );
