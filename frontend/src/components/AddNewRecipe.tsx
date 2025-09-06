@@ -11,6 +11,7 @@ export default function AddNewRecipe() {
     const [cookingTime, setCookingTime] = useState<number>(0)
     const [imageUrl, setImageUrl] = useState<string>("")
     const [ingredients, setIngredients] = useState<Ingredient[]>([{name: "", quantity:0, unit:"GRAM"}])
+    const [recipeText, setRecipeText] = useState<string>("")
 
     const routeTo = useNavigate()
 
@@ -19,7 +20,7 @@ export default function AddNewRecipe() {
             title: title,
             cookingTime: cookingTime,
             ingredients: ingredients,
-            recipeText: "put all ingredients together in a pot and bake them well",
+            recipeText: recipeText,
             image: "/images/" + imageUrl
         }
 
@@ -38,6 +39,8 @@ export default function AddNewRecipe() {
                 setImageUrl={setImageUrl}
                 ingredients={ingredients}
                 setIngredients={setIngredients}
+                recipeText={recipeText}
+                setRecipeText={setRecipeText}
                 sendDataToDatabase={sendDataToDatabase}
             />
         </>

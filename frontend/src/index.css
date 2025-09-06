@@ -44,3 +44,12 @@ body {
   text-align: left;
   background-color: #f1f1f1;
 }
+
+
+.ck-editor__editable_inline {
+   min-height: 300px; /* editor window height */
+ }
+
+.ingredients-table {
+  margin-left: 50px;
+}

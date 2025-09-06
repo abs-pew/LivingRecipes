@@ -41,8 +41,8 @@ export default function IngredientsSubform(props:Readonly<Props>) {
 
     return (
         <>
-            <p><strong> Ingredients: </strong> </p>
-            <table>
+            <strong> Ingredients: </strong>
+            <table className={"ingredients-table"}>
                 <thead>
                 <tr>
                     <th> Name</th>
@@ -95,10 +95,20 @@ export default function IngredientsSubform(props:Readonly<Props>) {
             </table>
 
             <button
+                style={{
+                    margin: "10px",         // all sides
+                    marginLeft: "50px",     // specific side
+                    padding: "6px 12px",
+                    backgroundColor: "#3498db",
+                    color: "#fff",
+                    border: "none",
+                    borderRadius: "4px",
+                    cursor: "pointer"
+                }}
                 type="button"
                 onClick={addIngredient}
             >
-                Add Ingredient
+                Next Ingredient
             </button>
         </>
     );

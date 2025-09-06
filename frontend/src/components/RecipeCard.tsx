@@ -18,7 +18,8 @@ export default function RecipeCard(props: Readonly<Props>) {
                                 )}
                         </ul>
                 </div>
-                <div><strong>Recipe: </strong> {props.recipe.recipeText} </div>
+                <div><strong>Recipe Instructions: </strong>
+                    <div dangerouslySetInnerHTML={{ __html: props.recipe.recipeText }} /> </div>
                 <div><img src={props.recipe.image} alt={props.recipe.title} width={"200px"} height={"200px"}/></div>
         </div>
 )
