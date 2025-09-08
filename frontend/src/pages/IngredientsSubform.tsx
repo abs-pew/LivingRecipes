@@ -1,5 +1,7 @@
 
 import type {Ingredient} from "../Ingredient.ts";
+import ShowAsDropdownList from "../components/ShowAsDropdownList.tsx";
+import {UnitsList} from "../UnitsList.ts";
 
 type Props = {
     ingredients: Ingredient[]
@@ -31,7 +33,7 @@ export default function IngredientsSubform(props:Readonly<Props>) {
         props.setIngredients(props.ingredients.filter((_, idx) => index !== idx))
     }
 
-    {/* Updates a specific field in a specific ingredient based in passed index and field */}
+    {/* Updates a specific field in a specific ingredient based on passed index and field */}
     const updateIngredients =
         (index:number, fieldName:string, value) => {
         const updatedIngredients = [...props.ingredients]
@@ -73,12 +75,13 @@ export default function IngredientsSubform(props:Readonly<Props>) {
                                         updateIngredients(index, "quantity", event.target.value)}/>
                             </td>
                             <td>
-                                <input
-                                    placeholder={"Ingredient unit ..."}
-                                    type={"text"}
+                                <ShowAsDropdownList
+                                    enumValues={Object.values(UnitsList)}
                                     value={ingredient.unit}
-                                    onChange={(event) =>
-                                        updateIngredients(index, "unit", event.target.value)}/>
+                                    onChange={(newValue) =>
+                                        updateIngredients(index, "unit", newValue)}
+                                />
+
                             </td>
                             <td>
                                 <button

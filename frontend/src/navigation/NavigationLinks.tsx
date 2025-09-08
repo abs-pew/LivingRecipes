@@ -7,7 +7,6 @@ export default function NavigationLinks() {
             <p><Link to={"/"}> Home </Link></p>
             <p><Link to={"/recipes"}> All Recipes </Link></p>
             <p><Link to={"/new_recipe"}> Add New Recipe </Link></p>
-
         </>
     )
 }

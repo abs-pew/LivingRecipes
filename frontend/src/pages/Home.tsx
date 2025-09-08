@@ -1,12 +1,8 @@
 
 export default function Home() {
     return (
-        <div>
-            §§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§
-
-            Welcome to our diverse set of delicious recipes!!
-
-            §§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§
+        <div style={{ display: "flex", justifyContent: "center"}}>
+            <h1>Welcome to recipes, recipes, and more recipes!!</h1>
         </div>
     );
 }

@@ -4,13 +4,14 @@ import axios from "axios";
 import type {RecipeDto} from "../RecipeDto.ts";
 import {useNavigate} from "react-router-dom";
 import type {Ingredient} from "../Ingredient.ts";
+import {UnitsList} from "../UnitsList.ts";
 
 export default function AddNewRecipe() {
 
     const [title, setTitle] = useState<string>("")
     const [cookingTime, setCookingTime] = useState<number>(0)
     const [imageUrl, setImageUrl] = useState<string>("")
-    const [ingredients, setIngredients] = useState<Ingredient[]>([{name: "", quantity:0, unit:"GRAM"}])
+    const [ingredients, setIngredients] = useState<Ingredient[]>([{name: "", quantity:0, unit:UnitsList.GRAM}])
     const [recipeText, setRecipeText] = useState<string>("")
 
     const routeTo = useNavigate()

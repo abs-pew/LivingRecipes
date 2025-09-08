@@ -7,7 +7,7 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
 type Props = {
     setTitle:(title:string) => void
-    setCookingTime:(cookingTime:number) => void
+    setCookingTime:(cookingTime:number|string) => void
     setImageUrl:(imageUrl:string) => void
     ingredients:Ingredient[]
     setIngredients:(ingredients:Ingredient[]) => void
@@ -19,7 +19,7 @@ type Props = {
 export default function RecipeForm(props:Readonly<Props>) {
 
 
-    const [imagePreview, setImagePreview] = useState(null)
+    const [imagePreview, setImagePreview] = useState<string|null>(null)
 
     function handleSubmit(event:FormEvent<HTMLFormElement>) {
         event.preventDefault()
