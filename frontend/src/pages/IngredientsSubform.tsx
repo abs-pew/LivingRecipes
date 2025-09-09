@@ -61,6 +61,7 @@ export default function IngredientsSubform(props:Readonly<Props>) {
                             <td>
                                 <input
                                 placeholder={"Ingredient name ..."}
+                                required={true}
                                 type={"text"}
                                 value={ingredient.name}
                                 onChange={(event) =>
@@ -69,6 +70,7 @@ export default function IngredientsSubform(props:Readonly<Props>) {
                             <td>
                                 <input
                                     placeholder={"Ingredient quantity ..."}
+                                    required={true}
                                     type={"number"}
                                     value={ingredient.quantity}
                                     onChange={(event) =>

@@ -7,7 +7,7 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
 type Props = {
     setTitle:(title:string) => void
-    setCookingTime:(cookingTime:number|string) => void
+    setCookingTime:(cookingTime:number) => void
     setImageUrl:(imageUrl:string) => void
     ingredients:Ingredient[]
     setIngredients:(ingredients:Ingredient[]) => void
@@ -46,19 +46,21 @@ export default function RecipeForm(props:Readonly<Props>) {
                <label >
                    <p><strong> Title: </strong>
                        <input
-                           onChange={event => props.setTitle(event.target.value)}
                            placeholder={"Enter recipe title ..."}
-                           required={true}/>
+                           required={true}
+                           onChange={event => props.setTitle((event.target.value))}
+                         />
                    </p>
                </label>
 
                <label>
                    <p><strong> Cooking Time: </strong>
                        <input
-                           onChange={event => props.setCookingTime(event.target.value)}
                            placeholder={"Est. cooking/backing time ..."}
+                           required={true}
                            type={"number"}
-                           required={true}/>
+                           onChange={event => props.setCookingTime(event.target.value)}
+                       />
                    </p>
                </label>
 
@@ -68,9 +70,10 @@ export default function RecipeForm(props:Readonly<Props>) {
                <div style={{ marginBottom: "12px", marginTop: "12px" }}>
                    <p><label> <strong> Recipe Instructions: </strong> </label></p>
                    <CKEditor
+                       required={true}
                        editor={ClassicEditor}
                        config={{
-                           placeholder: "Type your recipe instructions here ..." }}
+                           placeholder: "Type your recipe instructions here ..."}}
                        data={props.recipeText}
                        onChange={(event, editor) => {
                            const data = editor.getData();

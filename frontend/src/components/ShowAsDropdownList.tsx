@@ -1,6 +1,7 @@
 export default function ShowAsDropdownList({ enumValues, value, onChange }) {
     return (
         <select
+            required={true}
             value={value}
             onChange={(e) => onChange(e.target.value)}
             style={{ padding: "1px", width: "100%" }}
