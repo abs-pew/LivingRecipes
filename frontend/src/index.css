@@ -1,12 +1,10 @@
 body {
   font-family: serif;
 }
-p {
-  font-size: medium;
-}
 
 .recipe-card {
-  margin: 10px;
+  margin: 30px;
+  border-radius: 15px;
   padding: 5px;
   min-width: 200px;
   min-height: 100px;
@@ -17,31 +15,69 @@ p {
 .grid {
   display: grid;
   grid-template-columns: 1fr 4fr;
-  padding: 10px;
+  height: 100vh;
 }
 
 .window-pane {
   border-radius: 12px;
   border: 1px solid black;
   padding: 10px;
-  font-size: 30px;
+  font-size: 16px;
   text-align: center;
-  min-height: 700px;
 }
 
 .window-pane.top {
   grid-column-start: 1;
   grid-column-end: 3;
   text-align: center;
-  min-height: 20px;
   background-color: #f1f1f1;
+  position: sticky;
+  top: 0;
+  z-index: 10; /* keep above content */
 }
 
 .window-pane.left {
   background-color: #f1f1f1;
   font-size: medium;
+  position: sticky;
+  top: 50px; /* offset height of top-pane */
+  height: calc(100vh - 50px); /* adjust for header height */
+  overflow-y: auto; /* scroll if nav items overflow */
 }
 
 .window-pane.right {
+  text-align: left;
   background-color: #f1f1f1;
+  overflow-y: auto;
+}
+
+.ck-editor__editable_inline {
+   min-height: 250px; /* editor window height */
+ }
+
+.ingredients-table {
+  margin-left: 50px;
+}
+
+.search-bar {
+  margin-left: 50px;
+  margin-right: 50px;
+  padding: 8px;
+  border-bottom: 1px solid #ccc;
+}
+
+.search-bar input {
+  display: block;       /* important for margin auto to work */
+  width: 300px;         /* desired width of the field */
+  margin: 0 auto;       /* centers the field horizontally */
+  margin-bottom: 10px;  /* optional spacing below */
+
+}
+
+.search-bar button {
+  display: block;       /* important for margin auto to work */
+  width: fit-content;         /* desired width of the field */
+  margin: 0 auto;       /* centers the field horizontally */
+  margin-bottom: 10px;  /* optional spacing below */
+
 }

@@ -1,11 +1,11 @@
 package de.neuefische.backend.model;
 
 public enum UnitsList {
-    GRAM("gm"),
-    POUND("lb(s)"),
+    GRAM("gm(s)"),
     LITER("l(s)"),
     KILOGRAM("kg(s)"),
-    MILLILITRE("ml(s)");
+    MILLILITRE("ml(s)"),
+    PIECE("pc(s)");
 
     private final String valueString;
     UnitsList(String valueString) {
