@@ -24,4 +24,15 @@ public class RecipeController {
     public Recipe addRecipe(@RequestBody RecipeDto recipeDto) {
         return recipeService.addRecipe(recipeDto);
     }
+
+    @GetMapping("/{id}")
+    public Recipe getRecipeById(@PathVariable String id) {
+        return recipeService.getRecipeById(id);
+    }
+
+    @PutMapping("/{id}")
+    public Recipe updateRecipeById(@PathVariable String id, @RequestBody RecipeDto updatedRecipeDto) {
+        Recipe updatedRecipe = recipeService.updateRecipeById(id, updatedRecipeDto);
+        return updatedRecipe;
+    }
 }
