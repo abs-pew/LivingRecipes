@@ -135,44 +135,44 @@ LocalDateTime currentDateTime = LocalDateTime.now();
         verify(mockRecipeRepo, times(1)).findById(id);
 
     }
-//    @Test
-//    void updateRecipeById_shouldReturnUpdatedRecipe_whenCalled() {
-//
-//        //GIVEN
-//        String id = "ID001";
-//        LocalDateTime createdAt = LocalDateTime.now();
-//        String category = "Vegan";
-//
-//        Recipe recipeToUpdate = new Recipe(id, "Butter Chicken", 45,
-//                List.of(
-//                        new Ingredient("boneless chicken", 1000, UnitsList.GRAM),
-//                        new Ingredient("butter", 100, UnitsList.GRAM),
-//                        new Ingredient("salt", 10, UnitsList.GRAM)),
-//                "put all ingredients together in a pot and cook them well",
-//                "images link here",
-//                createdAt, category);;
-//        when(mockRecipeRepo.findById(id)).thenReturn(Optional.of(recipeToUpdate));
-//
-//        RecipeDto updatedRecipeDto = new RecipeDto("Chicken65", 145,
-//                List.of(
-//                        new Ingredient("boneless chicken", 11000, UnitsList.GRAM),
-//                        new Ingredient("butter", 1100, UnitsList.GRAM),
-//                        new Ingredient("salt", 110, UnitsList.GRAM)),
-//                "put all ingredients together in a pot and cook them well",
-//                "images link here too");
-//
-//        Recipe updatedRecipe = updatedRecipeDto.createNewRecipe(id, createdAt, category);
-//
-//        when(mockRecipeRepo.save(updatedRecipe)).thenReturn(updatedRecipe);
-//
-//        //WHEN
-//        Recipe actual = testRecipeService.updateRecipeById(id, updatedRecipeDto);
-//
-//        //THEN
-//        verify(mockRecipeRepo).save(updatedRecipe);
-//
-//        assertEquals(updatedRecipe, actual);
-//    }
+    @Test
+    void updateRecipeById_shouldReturnUpdatedRecipe_whenCalled() {
+
+        //GIVEN
+        String id = "ID001";
+        LocalDateTime createdAt = LocalDateTime.now();
+        String category = "Vegan";
+
+        Recipe recipeToUpdate = new Recipe(id, "Butter Chicken", 45,
+                List.of(
+                        new Ingredient("boneless chicken", 1000, UnitsList.GRAM),
+                        new Ingredient("butter", 100, UnitsList.GRAM),
+                        new Ingredient("salt", 10, UnitsList.GRAM)),
+                "put all ingredients together in a pot and cook them well",
+                "images link here",
+                createdAt, category);;
+        when(mockRecipeRepo.findById(id)).thenReturn(Optional.of(recipeToUpdate));
+
+        RecipeDto updatedRecipeDto = new RecipeDto("Chicken65", 145,
+                List.of(
+                        new Ingredient("boneless chicken", 11000, UnitsList.GRAM),
+                        new Ingredient("butter", 1100, UnitsList.GRAM),
+                        new Ingredient("salt", 110, UnitsList.GRAM)),
+                "put all ingredients together in a pot and cook them well",
+                "images link here too");
+
+        Recipe updatedRecipe = updatedRecipeDto.createNewRecipe(id, createdAt, category);
+
+        when(mockRecipeRepo.save(updatedRecipe)).thenReturn(updatedRecipe);
+
+        //WHEN
+        Recipe actual = testRecipeService.updateRecipeById(id, updatedRecipeDto);
+
+        //THEN
+        verify(mockRecipeRepo).save(updatedRecipe);
+
+        assertEquals(updatedRecipe, actual);
+    }
 
 
 }

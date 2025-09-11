@@ -183,7 +183,7 @@ class RecipeControllerTest {
                 //THEN
                 .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
-/*
+
     @Test
     @DirtiesContext
     void updateRecipeById() throws Exception {
@@ -267,5 +267,5 @@ class RecipeControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.createdAt").isNotEmpty())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.category").value(category));
     }
-    */
+
 }
