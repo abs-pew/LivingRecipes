@@ -9,4 +9,6 @@ import java.util.List;
 @Repository
 public interface RecipeRepository extends MongoRepository<Recipe, String> {
     List<Recipe> id(String id);
+
+    Recipe getRecipeById(String id);
 }
