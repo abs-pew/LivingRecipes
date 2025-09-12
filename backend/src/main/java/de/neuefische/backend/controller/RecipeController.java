@@ -1,6 +1,7 @@
 package de.neuefische.backend.controller;
 
 import de.neuefische.backend.dto.RecipeDto;
+import de.neuefische.backend.exceptions.RecipeNotFoundException;
 import de.neuefische.backend.model.Recipe;
 import de.neuefische.backend.service.RecipeService;
 import org.springframework.web.bind.annotation.*;
@@ -23,5 +24,20 @@ public class RecipeController {
     @PostMapping
     public Recipe addRecipe(@RequestBody RecipeDto recipeDto) {
         return recipeService.addRecipe(recipeDto);
+    }
+
+    @GetMapping("/{id}")
+    public Recipe getRecipeById(@PathVariable String id) {
+        return recipeService.getRecipeById(id);
+    }
+
+    @PutMapping("/{id}")
+    public Recipe updateRecipeById(@PathVariable String id, @RequestBody RecipeDto updatedRecipeDto) {
+        Recipe updatedRecipe = recipeService.updateRecipeById(id, updatedRecipeDto);
+        return updatedRecipe;
+    }
+    @DeleteMapping("/{id}")
+    public void deleteRecipeById(@PathVariable String id) {
+        recipeService.deleteRecipeById(id);
     }
 }

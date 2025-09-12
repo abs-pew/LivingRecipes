@@ -1,41 +1,90 @@
-import {type FormEvent, useState} from "react";
+import {type FormEvent, useEffect, useState} from "react";
 import * as React from "react";
 import IngredientsSubform from "./IngredientsSubform.tsx";
 import type {Ingredient} from "../Ingredient.ts";
 import {CKEditor} from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import type {Recipe} from "../Recipe.ts";
+import {UnitsList} from "../UnitsList.ts";
+import {useNavigate} from "react-router-dom";
+import type {RecipeDto} from "../RecipeDto.ts";
+import axios from "axios";
 
 type Props = {
-    setTitle:(title:string) => void
-    setCookingTime:(cookingTime:number) => void
-    setImageUrl:(imageUrl:string) => void
-    ingredients:Ingredient[]
-    setIngredients:(ingredients:Ingredient[]) => void
-    recipeText:string
-    setRecipeText:(recipeText:string) => void
-    sendDataToDatabase:() => void
+    recipe?:Recipe
+    isEditMode?:boolean
 }
 
 export default function RecipeForm(props:Readonly<Props>) {
 
+    const [title, setTitle] = useState<string>("")
+    const [cookingTime, setCookingTime] = useState<number>(0)
+    const [imageUrl, setImageUrl] = useState<string>("")
+    const [ingredients, setIngredients] = useState<Ingredient[]>([{name: "", quantity:0, unit:UnitsList.GRAM}])
+    const [recipeText, setRecipeText] = useState<string>("")
+
+    const routeTo = useNavigate()
 
     const [imagePreview, setImagePreview] = useState<string|null>(null)
 
+    // Load existing recipe into state if in edit mode
+    useEffect(() => {
+        if (props.isEditMode && props.recipe) {
+            setTitle(props.recipe.title)
+            setCookingTime(props.recipe.cookingTime)
+            setIngredients(props.recipe.ingredients)
+            setRecipeText(props.recipe.recipeText)
+            if (props.recipe.image) {
+                setImageUrl(props.recipe.image)
+                setImagePreview(props.recipe.image) // existing image URL
+            }
+        }
+    }, [props.isEditMode, props.recipe])
+
+
+    function sendDataToDatabase(){
+        const recipeDto: RecipeDto = {
+            title: title,
+            cookingTime: cookingTime,
+            ingredients: ingredients,
+            recipeText: recipeText,
+            image: "/images/" + imageUrl
+        }
+
+        if (props.isEditMode && props.recipe) {
+            console.log(props.recipe.id)
+            axios.put(`../api/recipes/${props.recipe.id}`, recipeDto, {
+                headers: { "Content-Type": "application/json" }})
+                .then(()=>console.log("Recipe updated successfully."))
+                .catch((error) => console.log("Function: sendToDatabase. ERROR: " + error))
+            alert("Recipe updated successfully.")
+        } else
+        {
+            axios.post("api/recipes", recipeDto)
+                .then(()=>console.log("New recipe has been successfully added."))
+                .then(()=>alert(recipeDto.image))
+                .catch((error) => console.log("Function: sendToDatabase. ERROR: " + error))
+            alert("Recipe is successfully saved.")
+        }
+        routeTo("/recipes")
+    }
+
+
     function handleSubmit(event:FormEvent<HTMLFormElement>) {
         event.preventDefault()
-        props.sendDataToDatabase()
+        sendDataToDatabase()
     }
 
     function handleImageFile(event: React.ChangeEvent<HTMLInputElement>) {
         const imageFile = event.target.files[0]
         if (imageFile)
         {
-            props.setImageUrl(imageFile.name)
+            setImageUrl(imageFile.name)
             setImagePreview(URL.createObjectURL(imageFile))
         } else
         {
             /* this will remove the preview if it is cancelled */
-            props.setImageUrl("")
+            setImageUrl("")
             setImagePreview(null)
         }
     }
@@ -48,7 +97,8 @@ export default function RecipeForm(props:Readonly<Props>) {
                        <input
                            placeholder={"Enter recipe title ..."}
                            required={true}
-                           onChange={event => props.setTitle((event.target.value))}
+                           value={title}
+                           onChange={event => setTitle((event.target.value))}
                          />
                    </p>
                </label>
@@ -58,13 +108,16 @@ export default function RecipeForm(props:Readonly<Props>) {
                        <input
                            placeholder={"Est. cooking/backing time ..."}
                            required={true}
+                           value={cookingTime}
                            type={"number"}
-                           onChange={event => props.setCookingTime(event.target.value)}
+                           onChange={event => setCookingTime(event.target.value)}
                        />
                    </p>
                </label>
 
-               <IngredientsSubform ingredients={props.ingredients} setIngredients={props.setIngredients}/>
+               <IngredientsSubform ingredients={ingredients}
+                                   setIngredients={setIngredients}
+               />
                <p></p>
 
                <div style={{ marginBottom: "12px", marginTop: "12px" }}>
@@ -72,12 +125,12 @@ export default function RecipeForm(props:Readonly<Props>) {
                    <CKEditor
                        required={true}
                        editor={ClassicEditor}
+                       data={recipeText}
                        config={{
                            placeholder: "Type your recipe instructions here ..."}}
-                       data={props.recipeText}
                        onChange={(event, editor) => {
                            const data = editor.getData();
-                           props.setRecipeText(data);
+                           setRecipeText(data);
                        }}
                    />
                </div>
@@ -109,7 +162,7 @@ export default function RecipeForm(props:Readonly<Props>) {
                            fontSize: "15px"
                        }}
                    >
-                       Save Recipe
+                       {props.isEditMode ? "Update Recipe" : "Save Recipe"}
                    </button>
                </div>
 

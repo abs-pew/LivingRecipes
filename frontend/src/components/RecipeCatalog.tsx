@@ -40,7 +40,10 @@ export default function RecipeCatalog() {
                 filteredRecipes.length === 0
                     ? <p> No matching recipes found for {searchString}.</p>
                     : filteredRecipes.map(
-                        (recipe: Recipe) => <RecipeCard key={recipe.id} recipe={recipe}/>
+                        (recipe: Recipe) => <RecipeCard
+                                                        key={recipe.id}
+                                                        recipe={recipe}
+                                                        getAllRecipes={getAllRecipes} />
                     )
             }
         </>

@@ -2,6 +2,8 @@ package de.neuefische.backend.service;
 
 
 import de.neuefische.backend.dto.RecipeDto;
+import de.neuefische.backend.exceptions.RecipeNotFoundException;
+import de.neuefische.backend.mapper.RecipeMapper;
 import de.neuefische.backend.model.Ingredient;
 import de.neuefische.backend.model.Recipe;
 import de.neuefische.backend.model.UnitsList;
@@ -15,8 +17,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -75,19 +79,9 @@ class RecipeServiceTest {
                 "put all ingredients together in a pot and cook them well",
                 "images link here");
 
-//        Recipe recipeToSave = new Recipe("ID001", "Butter Chicken", 45,
-//                List.of(
-//                        new Ingredient("boneless chicken", 1000, UnitsList.GRAM),
-//                        new Ingredient("butter", 100, UnitsList.GRAM),
-//                        new Ingredient("salt", 10, UnitsList.GRAM)),
-//                "put all ingredients together in a pot and cook them well",
-//                "images link here",
-//                LocalDateTime.parse("2025-09-02T00:04:58.697022"), "Regular");
 
 LocalDateTime currentDateTime = LocalDateTime.now();
 
-//        Recipe recipeToSave = inputRecipe.createNewRecipe("ID001",
-//                LocalDateTime.parse("2025-09-02T00:04:58.697022"), "Regular");
         Recipe recipeToSave = inputRecipe.createNewRecipe("ID001",
                 currentDateTime, "Regular");
 
@@ -103,4 +97,103 @@ LocalDateTime currentDateTime = LocalDateTime.now();
         verify(mockRecipeRepo, times(1)).save(recipeToSave);
         assertEquals(recipeToSave, actual);
     }
+
+    @Test
+    void getRecipeById_shouldReturnRecipe_whenCalledWithId_001() {
+        //GIVEN
+        String id = "ID001";
+        Recipe testRecipe = new Recipe(id, "Butter Chicken", 45,
+                List.of(
+                        new Ingredient("boneless chicken", 1000, UnitsList.GRAM),
+                        new Ingredient("butter", 100, UnitsList.GRAM),
+                        new Ingredient("salt", 10, UnitsList.GRAM)),
+                "put all ingredients together in a pot and cook them well",
+                "images link here",
+                LocalDateTime.now(), "VEGAN");
+        when(mockRecipeRepo.findById(id)).thenReturn(Optional.of(testRecipe));
+
+        //WHEN
+        Recipe actual = testRecipeService.getRecipeById(id);
+
+        // THEN
+
+        assertEquals(testRecipe, actual);
+        verify(mockRecipeRepo, times(1)).findById(id);
+
+    }
+    @Test
+    void getRecipeById_shouldReturnException_whenCalledWithInvalidId_ID005() {
+        //GIVEN
+        String id = "ID005";
+        when(mockRecipeRepo.findById(id)).thenReturn(Optional.empty());
+        //WHEN
+        // THEN
+        assertThrows(RecipeNotFoundException.class, () -> testRecipeService.getRecipeById(id));
+        verify(mockRecipeRepo, times(1)).findById(id);
+
+    }
+    @Test
+    void updateRecipeById_shouldReturnUpdatedRecipe_whenCalled() {
+
+        //GIVEN
+        String id = "ID001";
+        LocalDateTime createdAt = LocalDateTime.now();
+        String category = "Vegan";
+
+        Recipe recipeToUpdate = new Recipe(id, "Butter Chicken", 45,
+                List.of(
+                        new Ingredient("boneless chicken", 1000, UnitsList.GRAM),
+                        new Ingredient("butter", 100, UnitsList.GRAM),
+                        new Ingredient("salt", 10, UnitsList.GRAM)),
+                "put all ingredients together in a pot and cook them well",
+                "images link here",
+                createdAt, category);
+        when(mockRecipeRepo.findById(id)).thenReturn(Optional.of(recipeToUpdate));
+
+        RecipeDto updatedRecipeDto = new RecipeDto("Chicken65", 145,
+                List.of(
+                        new Ingredient("boneless chicken", 11000, UnitsList.GRAM),
+                        new Ingredient("butter", 1100, UnitsList.GRAM),
+                        new Ingredient("salt", 110, UnitsList.GRAM)),
+                "put all ingredients together in a pot and cook them well",
+                "images link here too");
+
+        Recipe updatedRecipe = updatedRecipeDto.createNewRecipe(id, createdAt, category);
+
+        when(mockRecipeRepo.save(updatedRecipe)).thenReturn(updatedRecipe);
+
+        //WHEN
+        Recipe actual = testRecipeService.updateRecipeById(id, updatedRecipeDto);
+
+        //THEN
+        verify(mockRecipeRepo).save(updatedRecipe);
+
+        assertEquals(updatedRecipe, actual);
+    }
+
+    @Test
+    void deleteRecipeById_shouldDeleteRecipe_whenCalled() {
+        //GIVEN
+        String id = "ID001";
+        //doNothing().when(mockRecipeRepo).deleteById(id);
+        when(mockRecipeRepo.existsById(id)).thenReturn(true);
+        // WHEN
+        testRecipeService.deleteRecipeById(id);
+        //THEN
+        verify(mockRecipeRepo).deleteById(id);
+        verify(mockRecipeRepo, times(1)).deleteById(id);
+    }
+
+    @Test
+    void deleteRecipeById_shouldThrowException_whenCalled_withInvalidID() {
+        //GIVEN
+        String id = "ID005";
+        //doNothing().when(mockRecipeRepo).deleteById(id);
+        when(mockRecipeRepo.existsById(id)).thenReturn(false);
+        // WHEN
+        //THEN
+ assertThrows(RecipeNotFoundException.class, () -> testRecipeService.deleteRecipeById(id));
+    }
+
+
 }
