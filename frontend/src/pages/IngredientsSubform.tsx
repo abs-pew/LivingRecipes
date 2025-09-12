@@ -1,4 +1,3 @@
-
 import type {Ingredient} from "../Ingredient.ts";
 import ShowAsDropdownList from "../components/ShowAsDropdownList.tsx";
 import {UnitsList} from "../UnitsList.ts";
@@ -21,7 +20,7 @@ export default function IngredientsSubform(props:Readonly<Props>) {
         Spread (copy) them into a new array.
         Then add the new object { name: "", quantity: "", unit: "" } at the end.
         */
-        props.setIngredients([...props.ingredients, {name: "", quantity:0, unit:"GRAM"}])
+        props.setIngredients([...props.ingredients, {name: "", quantity:0, unit:UnitsList.GRAM}])
     }
 
     const removeIngredient = (index:number) => {
@@ -38,8 +37,8 @@ export default function IngredientsSubform(props:Readonly<Props>) {
 
     {/* Updates a specific field in a specific ingredient based on passed index and field */}
     const updateIngredients =
-        (index:number, fieldName:string, value) => {
-        const updatedIngredients = [...props.ingredients]
+        (index:number, fieldName:string, value:string|number) => {
+        const updatedIngredients:Ingredient[] = [...props.ingredients]
             updatedIngredients [index][fieldName] = value
             props.setIngredients(updatedIngredients)
     }
@@ -58,7 +57,7 @@ export default function IngredientsSubform(props:Readonly<Props>) {
                 </thead>
 
                 <tbody>
-                {props.ingredients.map((ingredient, index) =>
+                {props.ingredients.map((ingredient:Ingredient, index:number) =>
                     (
                         <tr key={index}>
                             <td>
@@ -83,7 +82,7 @@ export default function IngredientsSubform(props:Readonly<Props>) {
                                 <ShowAsDropdownList
                                     enumValues={Object.values(UnitsList)}
                                     value={ingredient.unit}
-                                    onChange={(newValue) =>
+                                    onChange={(newValue:UnitsList) =>
                                         updateIngredients(index, "unit", newValue)}
                                 />
 
