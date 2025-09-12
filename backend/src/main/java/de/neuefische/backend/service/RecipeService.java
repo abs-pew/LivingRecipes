@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.*;
 
-@With
 @Service
 public class RecipeService {
     private final RecipeRepository recipeRepo;
@@ -40,20 +39,10 @@ public class RecipeService {
 
     public Recipe updateRecipeById(String id, RecipeDto updatedRecipeDto) {
         Recipe recipeToUpdate = getRecipeById(id);
-
-        if (updatedRecipeDto.title() != null && !updatedRecipeDto.title().isEmpty()) {
-            recipeToUpdate = recipeToUpdate.withTitle(updatedRecipeDto.title());
-        }
-
-        if (updatedRecipeDto.cookingTime() != 0) {
-            recipeToUpdate = recipeToUpdate.withCookingTime(updatedRecipeDto.cookingTime());
-        }
-
-        recipeToUpdate = recipeToUpdate.withIngredients(updatedRecipeDto.ingredients());
-        recipeToUpdate = recipeToUpdate.withRecipeText(updatedRecipeDto.recipeText());
-        recipeToUpdate = recipeToUpdate.withImage(updatedRecipeDto.image());
-
-        return recipeRepo.save(recipeToUpdate);
+        // Future feature: Recipe category can be computed here and passed below as updated value
+        Recipe updatedRecipe = updatedRecipeDto.
+                    createNewRecipe(recipeToUpdate.id(), recipeToUpdate.createdAt(), recipeToUpdate.category());
+        return recipeRepo.save(updatedRecipe);
 
     }
 
