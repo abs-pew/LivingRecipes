@@ -117,8 +117,7 @@ export default function RecipeForm(props:Readonly<Props>) {
 
                <IngredientsSubform ingredients={ingredients}
                                    setIngredients={setIngredients}
-                                   recipe={props.recipe}
-                                   isEditMode={props.isEditMode}/>
+               />
                <p></p>
 
                <div style={{ marginBottom: "12px", marginTop: "12px" }}>

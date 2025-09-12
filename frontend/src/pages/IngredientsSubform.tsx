@@ -1,14 +1,10 @@
 import type {Ingredient} from "../Ingredient.ts";
 import ShowAsDropdownList from "../components/ShowAsDropdownList.tsx";
 import {UnitsList} from "../UnitsList.ts";
-import type {Recipe} from "../Recipe.ts";
 
 type Props = {
     ingredients: Ingredient[]
     setIngredients: (ingredients:Ingredient[]) => void
-    recipe?: Recipe
-    isEditMode?:boolean
-
 }
 export default function IngredientsSubform(props:Readonly<Props>) {
 

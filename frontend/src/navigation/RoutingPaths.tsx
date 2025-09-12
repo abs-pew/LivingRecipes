@@ -4,7 +4,6 @@ import RecipeCatalog from "../components/RecipeCatalog.tsx";
 import EditRecipe from "../components/EditRecipe.tsx";
 import RecipeForm from "../pages/RecipeForm.tsx";
 
-
 export default function RoutingPaths() {
 
     return (
