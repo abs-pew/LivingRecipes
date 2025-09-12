@@ -55,5 +55,12 @@ public class RecipeService {
         return recipeRepo.save(recipeToUpdate);
 
     }
+
+    public void deleteRecipeById(String id) {
+        if (!recipeRepo.existsById(id)) {
+            throw new RecipeNotFoundException("Recipe with the id: " + id + " not found!");
+        }
+        recipeRepo.deleteById(id);
+    }
 }
 

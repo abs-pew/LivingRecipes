@@ -268,4 +268,39 @@ class RecipeControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.category").value(category));
     }
 
+    @Test
+    @DirtiesContext
+  void deleteRecipeById_whenCalledWithValidId() throws Exception {
+
+        //GIVEN
+        String id = "ID001";
+        LocalDateTime createdAt = LocalDateTime.now();
+        String category = "Vegan";
+
+        Recipe existingRecipe = new Recipe(id, "Butter Chicken11", 45,
+                List.of(
+                        new Ingredient("boneless chicken", 1000, UnitsList.GRAM),
+                        new Ingredient("butter", 100, UnitsList.GRAM),
+                        new Ingredient("salt", 10, UnitsList.GRAM)),
+                "put all ingredients together in a pot and cook them well",
+                "image link here",
+                createdAt, category);
+        mockRecipeRepo.save(existingRecipe);
+
+        mockMvc.perform(
+                        MockMvcRequestBuilders
+                                .delete("/api/recipes/{id}", id))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+
+    }
+
+    @Test
+    @DirtiesContext
+    void deleteRecipeById_whenCalledWithInvalidId() throws Exception {
+        String id = "ID005";
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/recipes/{id}", id))
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
+
+    }
+
 }

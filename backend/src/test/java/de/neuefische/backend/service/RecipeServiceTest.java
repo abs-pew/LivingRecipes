@@ -32,9 +32,6 @@ class RecipeServiceTest {
     @Mock
     private RecipeRepository mockRecipeRepo;
 
-    @Mock
-    private RecipeMapper mockRecipeMapper;
-
     @InjectMocks
     private RecipeService testRecipeService;
 
@@ -150,7 +147,7 @@ LocalDateTime currentDateTime = LocalDateTime.now();
                         new Ingredient("salt", 10, UnitsList.GRAM)),
                 "put all ingredients together in a pot and cook them well",
                 "images link here",
-                createdAt, category);;
+                createdAt, category);
         when(mockRecipeRepo.findById(id)).thenReturn(Optional.of(recipeToUpdate));
 
         RecipeDto updatedRecipeDto = new RecipeDto("Chicken65", 145,
@@ -172,6 +169,30 @@ LocalDateTime currentDateTime = LocalDateTime.now();
         verify(mockRecipeRepo).save(updatedRecipe);
 
         assertEquals(updatedRecipe, actual);
+    }
+
+    @Test
+    void deleteRecipeById_shouldDeleteRecipe_whenCalled() {
+        //GIVEN
+        String id = "ID001";
+        //doNothing().when(mockRecipeRepo).deleteById(id);
+        when(mockRecipeRepo.existsById(id)).thenReturn(true);
+        // WHEN
+        testRecipeService.deleteRecipeById(id);
+        //THEN
+        verify(mockRecipeRepo).deleteById(id);
+        verify(mockRecipeRepo, times(1)).deleteById(id);
+    }
+
+    @Test
+    void deleteRecipeById_shouldThrowException_whenCalled_withInvalidID() {
+        //GIVEN
+        String id = "ID005";
+        //doNothing().when(mockRecipeRepo).deleteById(id);
+        when(mockRecipeRepo.existsById(id)).thenReturn(false);
+        // WHEN
+        //THEN
+ assertThrows(RecipeNotFoundException.class, () -> testRecipeService.deleteRecipeById(id));
     }
 
 
