@@ -22,7 +22,7 @@ public record Recipe(
 {
     public Recipe(String title, int cookingTime, List<Ingredient> ingredients, String recipeText, String image)
     {
-        this(null, title, cookingTime, ingredients, recipeText, image, null, "Regular");
+        this(null, title, cookingTime, ingredients, recipeText, image, null, null);
     }
 }
 

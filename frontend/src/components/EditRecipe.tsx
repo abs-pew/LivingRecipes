@@ -5,7 +5,10 @@ import axios from "axios";
 import RecipeForm from "../pages/RecipeForm.tsx";
 import type {Recipe} from "../Recipe.ts";
 
-export default function EditRecipe() {
+type Props = {
+    getAllRecipes: () => void
+}
+export default function EditRecipe(props:Readonly<Props>) {
 
     const { id } = useParams()
     const [recipe, setRecipe] = useState<Recipe|null>(null)
@@ -33,6 +36,7 @@ export default function EditRecipe() {
             <RecipeForm
                 recipe={recipe}
                 isEditMode={isEditMode}
+                getAllRecipes={props.getAllRecipes}
             />
         </>
     )
