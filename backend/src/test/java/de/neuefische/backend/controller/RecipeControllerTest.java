@@ -57,8 +57,7 @@ class RecipeControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
                 .andExpect(MockMvcResultMatchers.content().json("""
-                        []
-                        """));
+[]"""));
     }
 
     @Test
