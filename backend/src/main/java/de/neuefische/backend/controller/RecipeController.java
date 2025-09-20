@@ -1,7 +1,6 @@
 package de.neuefische.backend.controller;
 
 import de.neuefische.backend.dto.RecipeDto;
-import de.neuefische.backend.exceptions.RecipeNotFoundException;
 import de.neuefische.backend.model.Recipe;
 import de.neuefische.backend.service.RecipeService;
 import org.springframework.web.bind.annotation.*;
