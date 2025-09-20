@@ -72,6 +72,7 @@ export default function RecipeCard(props: Readonly<Props>) {
                     <p><strong>Portion size for: </strong>  {newPortionSize} persons</p>
                     <div
                         onClick={() => setIsIngrOpen(!isIngrOpen)}
+                        onKeyDown={() => setIsIngrOpen(!isIngrOpen)}
                         style={{
                             backgroundColor: "#FFFFFF",
                             padding: "0px",
@@ -164,6 +165,7 @@ export default function RecipeCard(props: Readonly<Props>) {
 
             <div
                 onClick={() => setIsRecipeOpen(!isRecipeOpen)}
+                onKeyDown={() => setIsRecipeOpen(!isRecipeOpen)}
                 style={{
                     backgroundColor: "#FFFFFF",
                     padding: "5px",
