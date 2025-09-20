@@ -19,9 +19,9 @@ type Props = {
 export default function RecipeForm(props:Readonly<Props>) {
 
     const [title, setTitle] = useState<string>("")
-    const [cookingTime, setCookingTime] = useState<number>(0)
+    const [cookingTime, setCookingTime] = useState<number>(15)
     const [imageUrl, setImageUrl] = useState<string>("")
-    const [ingredients, setIngredients] = useState<Ingredient[]>([{name: "", quantity:0, unit:UnitsList.GRAM}])
+    const [ingredients, setIngredients] = useState<Ingredient[]>([{name: "", quantity:1, unit:UnitsList.GRAM}])
     const [recipeText, setRecipeText] = useState<string>("")
 
     const routeTo = useNavigate()
@@ -100,13 +100,18 @@ export default function RecipeForm(props:Readonly<Props>) {
                </label>
 
                <label>
-                   <p><strong> Cooking Time: </strong>
+                   <p><strong> Cooking Time (minutes): </strong>
                        <input
                            placeholder={"Est. cooking/backing time ..."}
                            required={true}
                            value={cookingTime}
                            type={"number"}
-                           onChange={event => setCookingTime(event.target.value)}
+                           onChange={(e) => {
+                               const value = Number(e.target.value);
+                               if (value >= 1 || e.target.value === "") {
+                                   setCookingTime(value);
+                               }
+                           }}
                        />
                    </p>
                </label>
@@ -115,7 +120,6 @@ export default function RecipeForm(props:Readonly<Props>) {
                                    setIngredients={setIngredients}
                />
                <p></p>
-               recipe.png
                <div style={{ marginBottom: "12px", marginTop: "12px" }}>
                    <p><label> <strong> Recipe Instructions: </strong> </label></p>
                    <CKEditor
@@ -132,6 +136,9 @@ export default function RecipeForm(props:Readonly<Props>) {
                </div>
 
                <div>
+                   <label>
+                       Image:
+                   </label>
                    {/* Hidden file input */}
                    <input
                        type="file"
@@ -142,17 +149,12 @@ export default function RecipeForm(props:Readonly<Props>) {
                    />
 
                    {/* Custom styled label acts as button */}
+
                        <label
                            htmlFor="fileUpload"
-                           style={{
-                               padding: "6px 12px",
-                               backgroundColor: "darkgrey",
-                               borderRadius: "4px",
-                               cursor: "pointer",
-                               fontSize: "15px"
-                           }}
+                           style={{backgroundColor: "whitesmoke", color: "darkslateblue",  fontSize: "16px", fontFamily: "serif", cursor: "pointer", marginLeft: "5px",  marginRight: "5px", padding: "6px", display: "inline-block"}}
                        >
-                           Upload Image
+                           Browse File
                        </label>
 
                    {/* Show selected file name (optional) */}
@@ -160,12 +162,13 @@ export default function RecipeForm(props:Readonly<Props>) {
 
                    <button
                        style={{
-                           padding: "6px 6px",
-                           backgroundColor: "darkgrey",
-                           borderRadius: "4px",
+                           border: "none",
+                           padding: "6px 4px",
+                           backgroundColor: "whitesmoke",
+                           color: "darkslateblue",
                            cursor: "pointer",
                            fontSize: "16px",
-                           marginLeft: "4px"
+                           marginLeft: "4px", fontFamily: "serif",
                        }}
                        hidden={!imagePreview}
                        type={"button"}
@@ -173,7 +176,7 @@ export default function RecipeForm(props:Readonly<Props>) {
                            setImageUrl("")
                            setImagePreview(null)
                        }}>
-                       ❌
+                       Remove
                    </button>
                </div>
 

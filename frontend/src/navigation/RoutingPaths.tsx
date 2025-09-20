@@ -25,6 +25,22 @@ export default function RoutingPaths(props:Readonly<Props>) {
                 <Route path={"/edit/:id"} element={<EditRecipe
                                                     getAllRecipes={props.getAllRecipes}/>}
                 />
+                <Route path={"/regular"} element={<RecipeCatalog
+                                                    recipes={props.recipes}
+                                                    getAllRecipes={props.getAllRecipes}
+                                                    recipeCategory={"Regular"}/>}
+                />
+                <Route path={"/vegetarian"} element={<RecipeCatalog
+                                                    recipes={props.recipes}
+                                                    getAllRecipes={props.getAllRecipes}
+                                                    recipeCategory={"Vegetarian"}/>}
+                />
+
+                <Route path={"/vegan"} element={<RecipeCatalog
+                                                    recipes={props.recipes}
+                                                    getAllRecipes={props.getAllRecipes}
+                                                    recipeCategory={"Vegan"}/>}
+                />
             </Routes>
         </>
     );
