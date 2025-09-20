@@ -8,7 +8,7 @@ export default function SearchBar(props:Readonly<Props>) {
     return(
         <div className={"search-bar"}>
             <input
-                style={{width: "87%", padding: "6px", display: "inline-block"}}
+                style={{width: "470px", padding: "6px", display: "inline-block"}}
                 placeholder={"Search for recipes here ..."}
                 value={props.searchString}
                 onChange={(event =>

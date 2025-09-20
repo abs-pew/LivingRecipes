@@ -19,4 +19,5 @@ backend/.mvn
 /frontend/dist-ssr
 /frontend/*.local
 /frontend/images
-
+/frontend/*.jp*
+/frontend/*.png

@@ -1,32 +1,23 @@
 
 import type {Recipe} from "../Recipe.ts";
 import RecipeCard from "./RecipeCard.tsx";
-import {useEffect, useState} from "react";
-import axios from "axios";
+import {useState} from "react";
 import SearchBar from "../pages/SearchBar.tsx";
 
-export default function RecipeCatalog() {
+type Props = {
+    recipes: Recipe[]
+    getAllRecipes: () => void
+}
+export default function RecipeCatalog(props:Readonly<Props>) {
 
-    const [recipes, setRecipes] = useState<Recipe[]>()
     const [searchString, setSearchString] = useState<string>("")
 
-
-    function getAllRecipes() {
-        axios.get("api/recipes")
-            .then(Response => setRecipes(Response.data))
-            .catch((error) => console.log("Function: getAllRecipes. ERROR: " + error))
-    }
-
-    useEffect(() => {
-        getAllRecipes()
-    }, []);
-
-    if (!recipes)
+    if (!props.recipes)
     {
         return "loading recipes ..."
     }
 
-    const filteredRecipes: Recipe[] = recipes
+    const filteredRecipes: Recipe[] = props.recipes
         .filter(recipe =>
             (recipe.title.toLowerCase().includes(searchString.toLowerCase()) ||
                 recipe.recipeText.toLowerCase().includes(searchString.toLowerCase()))
@@ -43,7 +34,7 @@ export default function RecipeCatalog() {
                         (recipe: Recipe) => <RecipeCard
                                                         key={recipe.id}
                                                         recipe={recipe}
-                                                        getAllRecipes={getAllRecipes} />
+                                                        getAllRecipes={props.getAllRecipes} />
                     )
             }
         </>

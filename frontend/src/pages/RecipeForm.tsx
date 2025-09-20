@@ -13,6 +13,7 @@ import axios from "axios";
 type Props = {
     recipe?:Recipe
     isEditMode?:boolean
+    getAllRecipes: () => void
 }
 
 export default function RecipeForm(props:Readonly<Props>) {
@@ -34,9 +35,9 @@ export default function RecipeForm(props:Readonly<Props>) {
             setCookingTime(props.recipe.cookingTime)
             setIngredients(props.recipe.ingredients)
             setRecipeText(props.recipe.recipeText)
+            setImageUrl(props.recipe.image)
             if (props.recipe.image) {
-                setImageUrl(props.recipe.image)
-                setImagePreview(props.recipe.image) // existing image URL
+                setImagePreview("/" + imageUrl)
             }
         }
     }, [props.isEditMode, props.recipe])
@@ -48,7 +49,7 @@ export default function RecipeForm(props:Readonly<Props>) {
             cookingTime: cookingTime,
             ingredients: ingredients,
             recipeText: recipeText,
-            image: "/images/" + imageUrl
+            image: imageUrl
         }
 
         if (props.isEditMode && props.recipe) {
@@ -56,15 +57,14 @@ export default function RecipeForm(props:Readonly<Props>) {
             axios.put(`../api/recipes/${props.recipe.id}`, recipeDto, {
                 headers: { "Content-Type": "application/json" }})
                 .then(()=>console.log("Recipe updated successfully."))
+                .then(() => props.getAllRecipes())
                 .catch((error) => console.log("Function: sendToDatabase. ERROR: " + error))
-            alert("Recipe updated successfully.")
         } else
         {
             axios.post("api/recipes", recipeDto)
                 .then(()=>console.log("New recipe has been successfully added."))
-                .then(()=>alert(recipeDto.image))
+                .then(() => props.getAllRecipes())
                 .catch((error) => console.log("Function: sendToDatabase. ERROR: " + error))
-            alert("Recipe is successfully saved.")
         }
         routeTo("/recipes")
     }
@@ -76,16 +76,12 @@ export default function RecipeForm(props:Readonly<Props>) {
     }
 
     function handleImageFile(event: React.ChangeEvent<HTMLInputElement>) {
+
         const imageFile = event.target.files[0]
         if (imageFile)
         {
             setImageUrl(imageFile.name)
             setImagePreview(URL.createObjectURL(imageFile))
-        } else
-        {
-            /* this will remove the preview if it is cancelled */
-            setImageUrl("")
-            setImagePreview(null)
         }
     }
 
@@ -119,7 +115,7 @@ export default function RecipeForm(props:Readonly<Props>) {
                                    setIngredients={setIngredients}
                />
                <p></p>
-
+               recipe.png
                <div style={{ marginBottom: "12px", marginTop: "12px" }}>
                    <p><label> <strong> Recipe Instructions: </strong> </label></p>
                    <CKEditor
@@ -135,24 +131,59 @@ export default function RecipeForm(props:Readonly<Props>) {
                    />
                </div>
 
-               <label>
-                   <p><strong> Image : </strong>
-                       <input
-                           onChange={handleImageFile}
-                           accept={"image/*"}
-                           type={"file"}
-                           />
-                   </p>
-               </label>
-               {imagePreview && (
-                   <p><img src={imagePreview} alt="Selected" width={"200px"} height={"200px"}/></p>
+               <div>
+                   {/* Hidden file input */}
+                   <input
+                       type="file"
+                       id="fileUpload"
+                       style={{ display: "none" }}
+                       accept={"image/*"}
+                       onChange={handleImageFile}
+                   />
+
+                   {/* Custom styled label acts as button */}
+                       <label
+                           htmlFor="fileUpload"
+                           style={{
+                               padding: "6px 12px",
+                               backgroundColor: "darkgrey",
+                               borderRadius: "4px",
+                               cursor: "pointer",
+                               fontSize: "15px"
+                           }}
+                       >
+                           Upload Image
+                       </label>
+
+                   {/* Show selected file name (optional) */}
+                   {/*{imageUrl && <p>Selected: {imageUrl}</p>}*/}
+
+                   <button
+                       style={{
+                           padding: "6px 6px",
+                           backgroundColor: "darkgrey",
+                           borderRadius: "4px",
+                           cursor: "pointer",
+                           fontSize: "16px",
+                           marginLeft: "4px"
+                       }}
+                       hidden={!imagePreview}
+                       type={"button"}
+                       onClick={() => {
+                           setImageUrl("")
+                           setImagePreview(null)
+                       }}>
+                       ❌
+                   </button>
+               </div>
+
+               {(imagePreview &&
+                   <p><img src={imagePreview} alt="No uploaded image" width={"150px"} height={"150px"}/></p>
                )}
 
                <div style={{ display: "flex", justifyContent: "flex-end" }}>
                    <button
                        style={{
-                           margin: "10px",         // all sides
-                           marginLeft: "50px",     // specific side
                            padding: "6px 12px",
                            backgroundColor: "#3498db",
                            color: "#fff",
@@ -165,7 +196,6 @@ export default function RecipeForm(props:Readonly<Props>) {
                        {props.isEditMode ? "Update Recipe" : "Save Recipe"}
                    </button>
                </div>
-
            </form>
        </>
     );
