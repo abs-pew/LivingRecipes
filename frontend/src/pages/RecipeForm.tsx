@@ -9,6 +9,7 @@ import {UnitsList} from "../UnitsList.ts";
 import {useNavigate} from "react-router-dom";
 import type {RecipeDto} from "../RecipeDto.ts";
 import axios from "axios";
+import {YesNoConfirmationDialog} from "./YesNoConfirmationDialog.tsx";
 
 type Props = {
     recipe?:Recipe
@@ -23,6 +24,7 @@ export default function RecipeForm(props:Readonly<Props>) {
     const [imageUrl, setImageUrl] = useState<string>("")
     const [ingredients, setIngredients] = useState<Ingredient[]>([{name: "", quantity:1, unit:UnitsList.GRAM}])
     const [recipeText, setRecipeText] = useState<string>("")
+    const [confirmationPrompt, setConfirmationPrompt] = useState<boolean>(false)
 
     const routeTo = useNavigate()
 
@@ -41,6 +43,10 @@ export default function RecipeForm(props:Readonly<Props>) {
             }
         }
     }, [props.isEditMode, props.recipe])
+
+    function handleCancelAction() {
+        routeTo("/recipes")
+    }
 
 
     function sendDataToDatabase(){
@@ -82,6 +88,10 @@ export default function RecipeForm(props:Readonly<Props>) {
         {
             setImageUrl(imageFile.name)
             setImagePreview(URL.createObjectURL(imageFile))
+        } else
+        {
+            setImageUrl("")
+            setImagePreview(null)
         }
     }
 
@@ -156,28 +166,6 @@ export default function RecipeForm(props:Readonly<Props>) {
                        >
                            Browse File
                        </label>
-
-                   {/* Show selected file name (optional) */}
-                   {/*{imageUrl && <p>Selected: {imageUrl}</p>}*/}
-
-                   <button
-                       style={{
-                           border: "none",
-                           padding: "6px 4px",
-                           backgroundColor: "whitesmoke",
-                           color: "darkslateblue",
-                           cursor: "pointer",
-                           fontSize: "16px",
-                           marginLeft: "4px", fontFamily: "serif",
-                       }}
-                       hidden={!imagePreview}
-                       type={"button"}
-                       onClick={() => {
-                           setImageUrl("")
-                           setImagePreview(null)
-                       }}>
-                       Remove
-                   </button>
                </div>
 
                {(imagePreview &&
@@ -198,6 +186,29 @@ export default function RecipeForm(props:Readonly<Props>) {
                    >
                        {props.isEditMode ? "Update Recipe" : "Save Recipe"}
                    </button>
+                   <button
+                       style={{
+                           padding: "6px 12px",
+                           backgroundColor: "#3498db",
+                           color: "#fff",
+                           border: "none",
+                           borderRadius: "4px",
+                           cursor: "pointer",
+                           fontSize: "15px",
+                           marginLeft: "4px"
+                       }}
+                       type="button"
+                       onClick={() => setConfirmationPrompt(true)}
+                   >
+                       Cancel
+                   </button>
+                   {confirmationPrompt &&
+                       <YesNoConfirmationDialog
+                           setConfirmationPrompt={setConfirmationPrompt}
+                           actionHandle={handleCancelAction}
+                           messagePrompt={"All unsaved changes will be lost. Are you sure you to cancel?"}
+                       />}
+
                </div>
            </form>
        </>
