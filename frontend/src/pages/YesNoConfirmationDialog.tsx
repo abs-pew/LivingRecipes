@@ -2,6 +2,7 @@
 type Props = {
     setConfirmationPrompt: (confirmationPrompt: boolean) => void
     actionHandle : () => void
+    messagePrompt : string
 }
 
 export function YesNoConfirmationDialog(props: Readonly<Props>){
@@ -9,7 +10,7 @@ export function YesNoConfirmationDialog(props: Readonly<Props>){
         <>
                 <div className="modal">
                     <div className="modal-content">
-                        <p>Are you sure you want to perform delete action?</p>
+                        <p>{props.messagePrompt}</p>
                         <button style={{margin:"6px"}} onClick= {props.actionHandle}>Yes</button>
                         <button style={{margin:"6px"}} onClick={() => props.setConfirmationPrompt(false)}>No</button>
                     </div>

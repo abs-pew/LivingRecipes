@@ -156,7 +156,9 @@ export default function RecipeCard(props: Readonly<Props>) {
                         </button>
                         {confirmationPrompt &&
                             <YesNoConfirmationDialog
-                                setConfirmationPrompt={setConfirmationPrompt} actionHandle={handleRecipeDelete}
+                                setConfirmationPrompt={setConfirmationPrompt}
+                                actionHandle={handleRecipeDelete}
+                                messagePrompt={"Are you sure you want to delete this recipe?"}
                             />}
                     </div>
                 </div>

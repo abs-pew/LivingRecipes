@@ -9,6 +9,7 @@ import {UnitsList} from "../UnitsList.ts";
 import {useNavigate} from "react-router-dom";
 import type {RecipeDto} from "../RecipeDto.ts";
 import axios from "axios";
+import {YesNoConfirmationDialog} from "./YesNoConfirmationDialog.tsx";
 
 type Props = {
     recipe?:Recipe
@@ -19,10 +20,11 @@ type Props = {
 export default function RecipeForm(props:Readonly<Props>) {
 
     const [title, setTitle] = useState<string>("")
-    const [cookingTime, setCookingTime] = useState<number>(0)
+    const [cookingTime, setCookingTime] = useState<number>(15)
     const [imageUrl, setImageUrl] = useState<string>("")
-    const [ingredients, setIngredients] = useState<Ingredient[]>([{name: "", quantity:0, unit:UnitsList.GRAM}])
+    const [ingredients, setIngredients] = useState<Ingredient[]>([{name: "", quantity:1, unit:UnitsList.GRAM}])
     const [recipeText, setRecipeText] = useState<string>("")
+    const [confirmationPrompt, setConfirmationPrompt] = useState<boolean>(false)
 
     const routeTo = useNavigate()
 
@@ -41,6 +43,10 @@ export default function RecipeForm(props:Readonly<Props>) {
             }
         }
     }, [props.isEditMode, props.recipe])
+
+    function handleCancelAction() {
+        routeTo("/recipes")
+    }
 
 
     function sendDataToDatabase(){
@@ -82,6 +88,10 @@ export default function RecipeForm(props:Readonly<Props>) {
         {
             setImageUrl(imageFile.name)
             setImagePreview(URL.createObjectURL(imageFile))
+        } else
+        {
+            setImageUrl("")
+            setImagePreview(null)
         }
     }
 
@@ -100,13 +110,18 @@ export default function RecipeForm(props:Readonly<Props>) {
                </label>
 
                <label>
-                   <p><strong> Cooking Time: </strong>
+                   <p><strong> Cooking Time (minutes): </strong>
                        <input
                            placeholder={"Est. cooking/backing time ..."}
                            required={true}
                            value={cookingTime}
                            type={"number"}
-                           onChange={event => setCookingTime(event.target.value)}
+                           onChange={(e) => {
+                               const value = Number(e.target.value);
+                               if (value >= 1 || e.target.value === "") {
+                                   setCookingTime(value);
+                               }
+                           }}
                        />
                    </p>
                </label>
@@ -115,7 +130,6 @@ export default function RecipeForm(props:Readonly<Props>) {
                                    setIngredients={setIngredients}
                />
                <p></p>
-               recipe.png
                <div style={{ marginBottom: "12px", marginTop: "12px" }}>
                    <p><label> <strong> Recipe Instructions: </strong> </label></p>
                    <CKEditor
@@ -132,6 +146,9 @@ export default function RecipeForm(props:Readonly<Props>) {
                </div>
 
                <div>
+                   <label>
+                       Image:
+                   </label>
                    {/* Hidden file input */}
                    <input
                        type="file"
@@ -142,39 +159,13 @@ export default function RecipeForm(props:Readonly<Props>) {
                    />
 
                    {/* Custom styled label acts as button */}
+
                        <label
                            htmlFor="fileUpload"
-                           style={{
-                               padding: "6px 12px",
-                               backgroundColor: "darkgrey",
-                               borderRadius: "4px",
-                               cursor: "pointer",
-                               fontSize: "15px"
-                           }}
+                           style={{backgroundColor: "whitesmoke", color: "darkslateblue",  fontSize: "16px", fontFamily: "serif", cursor: "pointer", marginLeft: "5px",  marginRight: "5px", padding: "6px", display: "inline-block"}}
                        >
-                           Upload Image
+                           Browse File
                        </label>
-
-                   {/* Show selected file name (optional) */}
-                   {/*{imageUrl && <p>Selected: {imageUrl}</p>}*/}
-
-                   <button
-                       style={{
-                           padding: "6px 6px",
-                           backgroundColor: "darkgrey",
-                           borderRadius: "4px",
-                           cursor: "pointer",
-                           fontSize: "16px",
-                           marginLeft: "4px"
-                       }}
-                       hidden={!imagePreview}
-                       type={"button"}
-                       onClick={() => {
-                           setImageUrl("")
-                           setImagePreview(null)
-                       }}>
-                       ❌
-                   </button>
                </div>
 
                {(imagePreview &&
@@ -195,6 +186,29 @@ export default function RecipeForm(props:Readonly<Props>) {
                    >
                        {props.isEditMode ? "Update Recipe" : "Save Recipe"}
                    </button>
+                   <button
+                       style={{
+                           padding: "6px 12px",
+                           backgroundColor: "#3498db",
+                           color: "#fff",
+                           border: "none",
+                           borderRadius: "4px",
+                           cursor: "pointer",
+                           fontSize: "15px",
+                           marginLeft: "4px"
+                       }}
+                       type="button"
+                       onClick={() => setConfirmationPrompt(true)}
+                   >
+                       Cancel
+                   </button>
+                   {confirmationPrompt &&
+                       <YesNoConfirmationDialog
+                           setConfirmationPrompt={setConfirmationPrompt}
+                           actionHandle={handleCancelAction}
+                           messagePrompt={"All unsaved changes will be lost. Are you sure you to cancel?"}
+                       />}
+
                </div>
            </form>
        </>

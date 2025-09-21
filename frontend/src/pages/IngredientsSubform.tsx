@@ -16,7 +16,7 @@ export default function IngredientsSubform(props:Readonly<Props>) {
         Spread (copy) them into a new array.
         Then add the new object { name: "", quantity: "", unit: "" } at the end.
         */
-        props.setIngredients([...props.ingredients, {name: "", quantity:0, unit:UnitsList.GRAM}])
+        props.setIngredients([...props.ingredients, {name: "", quantity:1, unit:UnitsList.GRAM}])
     }
 
     const removeIngredient = (index:number) => {
@@ -71,8 +71,14 @@ export default function IngredientsSubform(props:Readonly<Props>) {
                                     required={true}
                                     type={"number"}
                                     value={ingredient.quantity}
-                                    onChange={(event) =>
-                                        updateIngredients(index, "quantity", event.target.value)}/>
+
+                                    onChange={(e) => {
+                                        const value = Number(e.target.value);
+                                        if (value >= 1 || e.target.value === "") {
+                                            updateIngredients(index, "quantity", value)
+                                        }
+                                    }}
+                                    />
                             </td>
                             <td>
                                 <ShowAsDropdownList
